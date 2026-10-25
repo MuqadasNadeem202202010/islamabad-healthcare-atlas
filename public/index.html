@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Islamabad Healthcare Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brand">
+    <span class="cross">+</span>
+    <div>
+      <h1>Islamabad <em>Healthcare</em> Atlas</h1>
+      <p class="kicker">Field register / Islamabad &amp; Rawalpindi</p>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <button id="addBtn" class="btn primary" type="button">+ New record</button>
+</header>
+
+<main class="layout">
+  <aside class="panel">
+    <div class="field">
+      <label for="q">Search name or sector</label>
+      <input id="q" type="search" placeholder="e.g. Shifa, F-8, Saddar">
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="fType">Type</label>
+        <select id="fType">
+          <option value="">All types</option>
+          <option value="hospital">Hospital</option>
+          <option value="clinic">Clinic</option>
+          <option value="pharmacy">Pharmacy</option>
+          <option value="laboratory">Laboratory</option>
+          <option value="dispensary">Dispensary</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fDistrict">District</label>
+        <select id="fDistrict">
+          <option value="">Both</option>
+          <option value="Islamabad">Islamabad</option>
+          <option value="Rawalpindi">Rawalpindi</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="fSource">Data source</label>
+        <select id="fSource">
+          <option value="">All sources</option>
+          <option value="Student-collected">Student-collected</option>
+          <option value="OpenStreetMap">OpenStreetMap</option>
+          <option value="Official">Official</option>
+        </select>
+      </div>
+      <label class="check lowcheck">
+        <input id="fEmergency" type="checkbox"> <span>24/7 emergency only</span>
+      </label>
+    </div>
+
+    <div class="listhead"><span id="count">0 records</span><button id="reset" class="linkbtn" type="button">Reset</button></div>
+    <div id="list" class="list"></div>
+  </aside>
+
+  <section class="mapwrap">
+    <div id="map"></div>
+    <div class="legend" id="legend"></div>
+    <div class="pickbanner" id="pickBanner">Click on the map to set the location</div>
+  </section>
+</main>
+
+<!-- Add / Update form -->
+<aside id="drawer" class="drawer">
+  <div class="drawerhead">
+    <h2 id="formTitle">New record</h2>
+    <button id="closeForm" class="linkbtn" type="button">Close</button>
+  </div>
+  <form id="form" novalidate>
+    <input type="hidden" id="fId">
+
+    <div class="field"><label for="name">Facility name *</label><input id="name" maxlength="150" required></div>
+
+    <div class="row2">
+      <div class="field"><label for="type">Type *</label>
+        <select id="type">
+          <option value="hospital">Hospital</option><option value="clinic">Clinic</option>
+          <option value="pharmacy">Pharmacy</option><option value="laboratory">Laboratory</option>
+          <option value="dispensary">Dispensary</option>
+        </select></div>
+      <div class="field"><label for="district">District *</label>
+        <select id="district"><option>Islamabad</option><option>Rawalpindi</option></select></div>
+    </div>
+
+    <div class="row2">
+      <div class="field"><label for="sector">Sector / area</label><input id="sector" maxlength="40" placeholder="F-8"></div>
+      <div class="field"><label for="ownership">Ownership</label>
+        <select id="ownership"><option value="private">Private</option><option value="public">Public</option><option value="semi-govt">Semi-govt</option></select></div>
+    </div>
+
+    <div class="row2">
+      <div class="field"><label for="beds">Beds</label><input id="beds" type="number" min="0" max="5000"></div>
+      <div class="field"><label for="phone">Phone</label><input id="phone" placeholder="051-1234567"></div>
+    </div>
+
+    <div class="field"><label for="source">Data source</label>
+      <select id="source"><option>Student-collected</option><option>OpenStreetMap</option><option>Official</option></select></div>
+
+    <div class="row2 checks">
+      <label class="check"><input id="emergency" type="checkbox"> <span>24/7 emergency</span></label>
+      <label class="check"><input id="verified" type="checkbox"> <span>Verified</span></label>
+    </div>
+
+    <div class="row2">
+      <div class="field"><label for="lat">Latitude *</label><input id="lat" inputmode="decimal" placeholder="33.7050"></div>
+      <div class="field"><label for="lng">Longitude *</label><input id="lng" inputmode="decimal" placeholder="73.0500"></div>
+    </div>
+    <button id="pickBtn" class="btn ghost" type="button">Pick location on map</button>
+
+    <div class="field"><label for="adminKey">Admin key *</label><input id="adminKey" type="password" autocomplete="off" placeholder="Required to save"></div>
+
+    <p id="formError" class="formerror" role="alert"></p>
+    <button class="btn primary wide" type="submit" id="saveBtn">Save record</button>
+  </form>
+</aside>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
